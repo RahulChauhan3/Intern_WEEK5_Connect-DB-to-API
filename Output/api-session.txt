@@ -1,0 +1,20 @@
+$ curl -s localhost:5000/api/health
+{"status":"ok","db":"connected"}
+
+$ curl -s -X POST localhost:5000/api/posts -H 'Content-Type: application/json' -d '{"title":"Hello MongoDB","author":"Rahul","content":"First post saved through the Express API.","tags":["mongodb"]}'
+{"title":"Hello MongoDB","content":"First post saved through the Express API.","author":"Rahul","tags":["mongodb"],"status":"published","createdAt":"2026-11-20T03:32:06.495Z","updatedAt":"2026-11-20T03:32:06.495Z","id":"6affbf36d35f0b719067d81a"}
+
+$ curl -s -X POST localhost:5000/api/posts -H 'Content-Type: application/json' -d '{"title":"x","tags":["a","b","c","d","e","f"]}'
+{"message":"Validation failed","errors":[{"field":"title","message":"Title must be 3-120 characters"},{"field":"content","message":"Content is required"},{"field":"author","message":"Author is required"},{"field":"tags","message":"Tags must be an array of at most 5 items"}]}
+
+$ curl -s 'localhost:5000/api/posts?limit=5'
+{"data":[{"title":"Hello MongoDB","content":"First post saved through the Express API.","author":"Rahul","tags":["mongodb"],"status":"published","createdAt":"2026-11-20T03:32:06.495Z","updatedAt":"2026-11-20T03:32:06.495Z","id":"6affbf36d35f0b719067d81a"}],"page":1,"limit":5,"total":1,"totalPages":1}
+
+$ curl -s -i localhost:5000/api/posts/not-an-id | head -1
+HTTP/1.1 400 Bad Request
+
+
+$ curl -s -i localhost:5000/api/posts/64b7f0c2a1b2c3d4e5f60718 | head -1
+HTTP/1.1 404 Not Found
+
+
